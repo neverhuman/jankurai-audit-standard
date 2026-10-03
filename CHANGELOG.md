@@ -25,6 +25,10 @@ The authoritative version string lives in [`VERSION`](VERSION).
 
 ### Changed
 
+- Dropped the hand-added access-contract line from the generated `CLAUDE.md`
+  adapter. It named a local tool's config path and this site's GitLab origins;
+  operational access steps belong in the site's own runbook, not in a published
+  repo. `CLAUDE.md` now matches the generated adapter template again.
 - Re-scoped `agent/owner-map.json`, `agent/test-map.json`, and
   `agent/generated-zones.toml` to the paths that exist in this docs-only repo,
   and added `agent/boundaries.toml` plus `agent/proof-lanes.toml` scoped to this
