@@ -8,14 +8,13 @@ agent-readable map of those proofs.
 ## CI tooling and security evidence
 
 Use Node 24 and run `npm ci` before the local proof lanes. The lockfile pins
-AJV and its format validators; `npm test` runs the aggregate, scanner-failure,
+AJV and its format validators; `npm test` runs the scanner-failure,
 and stale/invalid-artifact tests with temporary controlled subprocesses.
-The controlled subprocesses test the lane; hosted CI also runs the real tools.
+The controlled subprocesses test the lane; the forge CI also runs the real tools.
 
 `bash scripts/ci-local.sh security` and `just security` run one strict scanner
-entrypoint. Gitleaks, zizmor, actionlint, Syft, CycloneDX validation, and Grype
-are required. Cargo audit/deny and npm audit also block when their manifest is
-present. Zizmor SARIF findings block even when the process exits successfully.
+entrypoint. Gitleaks, Syft, CycloneDX validation, and Grype are required. Cargo
+audit/deny and npm audit also block when their manifest is present.
 Each scan uses a new `target/jankurai/security/run.*` directory. Missing,
 invalid, stale, or symlinked SBOMs fail before Grype; there is no hash-list
 fallback. CycloneDX 1.6 is checked against the unchanged vendored upstream
@@ -69,9 +68,7 @@ finding, its `rule_id`, `path`, and severity.
 
 This repo runs no model calls or paid APIs. Its quality job builds the pinned
 auditor, runs the proof lanes and network-backed security scanners, and is
-capped at a 90-minute timeout in
-[`.github/workflows/ci.yml`](../.github/workflows/ci.yml). The fast lane is
-designed to complete in seconds locally so agent iteration stays cheap.
+budgeted at a 90-minute timeout. The fast lane is designed to complete in seconds locally so agent iteration stays cheap.
 
 Explicit budget policy for any paid or unbounded operation introduced later:
 

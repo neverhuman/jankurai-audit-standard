@@ -2,7 +2,7 @@
 # CI doctor: confirms the local environment has every tool the ops/ci lanes
 # depend on, with the versions pinned in ops/ci/lib.sh. Run this before pushing
 # to verify the required tools are installed. Scanner and auditor versions are
-# selected by ops/ci/github-setup.sh and the pinned workflow; this presence
+# selected by ops/ci/github-setup.sh; this presence
 # check alone does not establish version or execution provenance.
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/../ops/ci/lib.sh"
@@ -10,7 +10,7 @@ source "$(dirname "${BASH_SOURCE[0]}")/../ops/ci/lib.sh"
 log "ci-doctor: checking required tools"
 
 status=0
-for tool in node npm jq gitleaks zizmor actionlint syft grype jankurai; do
+for tool in node npm jq gitleaks syft grype jankurai; do
   if command -v "$tool" >/dev/null 2>&1; then
     log "ok: $tool ($(command -v "$tool"))"
   else

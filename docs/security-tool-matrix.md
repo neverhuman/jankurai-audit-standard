@@ -3,13 +3,11 @@
 The executable policy is [`agent/security-policy.toml`](../agent/security-policy.toml).
 Local, CI, and release profiles require the same applicable scanners. Run
 `bash scripts/ci-local.sh security` or `just security` after installing the
-versions selected in `ops/ci/github-setup.sh` and `.github/workflows/ci.yml`.
+versions selected in `ops/ci/github-setup.sh`.
 
 | Tool | Required outcome |
 | --- | --- |
 | Gitleaks 8.21.2 | Secret scan succeeds and writes SARIF |
-| zizmor 1.25.2 | SARIF is valid and contains no findings or failed invocation |
-| actionlint 1.7.8 | Workflow validation succeeds |
 | Syft 1.40.0 | A fresh CycloneDX 1.6 inventory is produced |
 | Offline CycloneDX validator | Schema, timestamp, producer, and inventory checks pass |
 | Grype 0.99.0 | No inventory vulnerabilities at or above high severity |

@@ -36,10 +36,9 @@ just fast
 just check
 ```
 
-The full command surface lives in the root [`Justfile`](Justfile). Continuous
-integration runs the same lanes under
-[`.github/workflows/ci.yml`](.github/workflows/ci.yml), which delegates to the
-`ops/ci/*.sh` scripts.
+The full command surface lives in the root [`Justfile`](Justfile). GitHub is a
+publishing mirror only: continuous integration runs the same `ops/ci/*.sh`
+lanes on the forge and our own hosts.
 
 ## Layout
 

@@ -1,7 +1,8 @@
 # Release process
 
-GitHub is authoritative for `neverhuman/jankurai-standard`; `.jeryu/` records
-historical integration metadata. Release tags preserve the family pattern
+The forge is authoritative for jankurai-standard. GitHub is a publishing mirror
+only: CI runs on the forge and our own hosts, and releases are built and signed
+on our servers. A separate change introduces key-based release signing. Release tags preserve the family pattern
 `jankurai-standard-v<MAJOR.MINOR.PATCH>-split.<N>` from [SPLIT.md](../SPLIT.md).
 
 ## Version and changelog
@@ -14,19 +15,17 @@ tooling and is not a separately published product version.
 
 ## Qualification before tagging
 
-1. Install the selected tools from `ops/ci/github-setup.sh` and the pinned
-   workflow, use Node 24, and run `npm ci`.
+1. Install the selected tools from `ops/ci/github-setup.sh`, use Node 24, and
+   run `npm ci`.
 2. Run `bash scripts/ci-doctor.sh`, then `just check`. This includes the baseline
    comparison, required tests, document inventory, strict security, actual proof
    execution and verification, required proofbind, and zero-drop ratchet.
    Resolve every failure.
-3. Review the complete PR diff and exact-head `quality` and
-   `jankurai-standard/required` results. Merge through protection, then verify
-   the same checks on resulting main and its matching immutable `ci-<full-sha>`
-   tag. Retain `quality-evidence` and source/tool identities.
+3. Review the complete forge PR diff and its exact-head forge CI results. Merge
+   through the forge, then verify the same checks on resulting main. Retain the
+   quality evidence and source/tool identities.
 4. Verify version agreement and the evidence below before creating the versioned
-   release tag. Current `ci.yml` publishes qualification tags only; it does not
-   create a versioned release or sign release assets.
+   release tag.
 
 Downstream releases select immutable qualified tags. A green aggregate alone
 does not replace review of the actual required lane and its artifacts.
@@ -38,8 +37,8 @@ Syft, validates the inventory against pinned offline schemas, then runs Grype.
 It includes the committed Node tooling dependencies. All applicable scanners
 block; see [security tool matrix](security-tool-matrix.md).
 
-CI uploads actual reports, proof receipts, security results, and SBOM in
-`quality-evidence`. Bind a release inventory to the selected full commit/tree,
+CI keeps the actual reports, proof receipts, security results, and SBOM as
+quality evidence. Bind a release inventory to the selected full commit/tree,
 tool versions and digests, and exact artifact hashes. A score report is an audit
 result, not a signature over every source byte or proof of supervised execution.
 The public badge links its specific clean audited revision and
@@ -56,8 +55,8 @@ These release gates require evidence before publication:
 - **Monitoring:** retain resulting-main check URLs, artifact hashes, score
   reports, and failure logs so changes and regressions can be inspected.
 - **Rollback:** select the previous qualified immutable tag, as below.
-- **Abuse controls:** enforce actual branch protections, least-privilege workflow
-  permissions, and reviewed ownership in [branch protection](branch-protection.md).
+- **Abuse controls:** enforce actual branch protections and reviewed ownership;
+  see [branch protection](branch-protection.md).
 
 These are release requirements; the ordinary quality job does not itself
 rehearse backup restoration or publish signed release assets.

@@ -1,12 +1,13 @@
 # Running CI locally
 
-Every GitHub Actions job has a matching `just` recipe so failures are caught
-on the developer's machine, not first on GitHub. Use this as the contract
-between local work and the remote merge gate.
+GitHub is a publishing mirror only; CI runs on the forge and our own hosts.
+Every CI lane has a matching `just` recipe so failures are caught on the
+developer's machine first. Use this as the contract between local work and the
+forge merge gate.
 
 ## Quick reference
 
-| Recipe           | Mirrors GitHub job                          | Typical runtime |
+| Recipe           | Mirrors CI lane                             | Typical runtime |
 | ---------------- | ------------------------------------------- | --------------- |
 | `just ci-doctor` | prereq check — no CI equivalent             | < 1 s           |
 | `just ci-quick`  | `jankurai / test (ubuntu-latest, macos-latest)` | 5–10 min    |
@@ -17,7 +18,6 @@ between local work and the remote merge gate.
 | `just ci-release-publish` | `release / publish`              | 5–10 min        |
 | `just ci-shadow` | GitLab main shadow deploy           | < 1 min         |
 | `just ci`        | quick + coverage + audit                    | 25–40 min       |
-| `just zizmor`    | zizmor scan portion of the security lane    | < 5 s           |
 
 All recipes call `scripts/ci-local.sh` so the exact step sequence stays in
 one place. The script halts on the first failing step (`set -euo pipefail`).
@@ -35,7 +35,6 @@ rustup component add rustfmt clippy llvm-tools-preview
 cargo install cargo-llvm-cov --locked
 cargo install cargo-mutants --locked
 cargo install cargo-audit --locked
-cargo install zizmor --locked
 brew install gitleaks syft just gh jq ripgrep
 brew install --cask mactex            # macOS paper build (linux: texlive)
 npm ci                                # workspace dev deps
@@ -94,18 +93,18 @@ The full audit job:
 11. `jankurai audit . --mode ratchet --baseline agent/baselines/main.repo-score.json`
 
 ### `just ci-release`
-The release.yml `audit-gate` job. It regenerates Rust LCOV and cargo-mutants
+The release `audit-gate` lane. It regenerates Rust LCOV and cargo-mutants
 evidence before the ratchet audit, so tag releases do not depend on stale local
 `target/` files or PR artifacts. Optionally set `LOCAL_RELEASE_TAG=v1.0.0` to
 also assert `VERSION` matches the tag.
 
 ### `just ci-release-build`
-The release.yml build matrix. It expects `LOCAL_RELEASE_TAG=vX.Y.Z` and will
+The release build lane. It expects `LOCAL_RELEASE_TAG=vX.Y.Z` and will
 produce either a signed Linux tarball or a notarized macOS `.pkg` for the
 current host target, plus sha256 and Sigstore bundle sidecars.
 
 ### `just ci-release-publish`
-The release.yml publish job. It expects `LOCAL_RELEASE_TAG=vX.Y.Z` and
+The release publish lane. It expects `LOCAL_RELEASE_TAG=vX.Y.Z` and
 `GH_TOKEN` so it can stage the release notes, installer script, and Homebrew
 formula metadata before publishing the immutable tag.
 
@@ -114,14 +113,9 @@ The GitLab main-branch shadow deploy. It expects the local checkout to point at
 the internal GitLab origin and uses the local `.jeryu/local/repos/jankurai.toml`
 sidecar to mirror `main` to GitHub after the internal pipeline has passed.
 
-### `just zizmor`
-Static analysis of GitHub workflows. Run before pushing any `.github/workflows/`
-change — caught two cache-poisoning issues in the v1.0.0 PR before they
-reached CI.
-
 ## Editing the lane
 
-`scripts/ci-local.sh` is the source of truth. When a CI workflow step
+`scripts/ci-local.sh` is the source of truth. When a CI lane step
 changes, mirror the change in the same script so `just ci` stays accurate.
 The pre-commit hook does not yet run `just ci` (too slow); use it manually
 before opening or updating a pull request.

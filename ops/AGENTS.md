@@ -14,8 +14,8 @@ script entrypoints and the local/CI parity tooling.
 
 - Do not put product, standard, or documentation logic here; this cell is
   CI plumbing only.
-- Do not unpin a GitHub Action SHA in `.github/workflows/ci.yml`; every
-  third-party action stays pinned to a 40-character commit SHA.
+- Do not add GitHub Actions workflows. GitHub is a publishing mirror only; CI
+  runs on the forge and our own hosts through `ops/ci/*.sh`.
 - Do not hand-edit generated zones declared in
   [`agent/generated-zones.toml`](../agent/generated-zones.toml).
 

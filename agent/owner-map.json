@@ -12,7 +12,6 @@
     "Justfile": "ops",
     ".gitignore": "workspace",
     ".jeryu/": "ops",
-    ".github/": "ops",
     "agent/": "agent",
     "ops/": "ops",
     "scripts/": "ops",
