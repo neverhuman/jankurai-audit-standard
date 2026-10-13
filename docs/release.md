@@ -8,10 +8,11 @@ on our servers. A separate change introduces key-based release signing. Release 
 ## Version and changelog
 
 [`VERSION`](../VERSION), `agent/standard-version.toml`,
-`agent/split-member.toml`, and the proposed tag must agree. Record actual changes
-in [CHANGELOG.md](../CHANGELOG.md), then promote `Unreleased` to a dated version
-section in the reviewed release commit. The private Node package identifies CI
-tooling and is not a separately published product version.
+`agent/split-member.toml`, and the proposed tag must agree. Generate release
+notes from the commits since the last release, using their subjects and `Todo:`
+trailers. In the reviewed release commit, promote `Unreleased` to a dated version
+section in [CHANGELOG.md](../CHANGELOG.md). The private Node package identifies
+CI tooling and is not a separately published product version.
 
 ## Qualification before tagging
 
@@ -64,6 +65,7 @@ rehearse backup restoration or publish signed release assets.
 ## Rollback
 
 Point consumers to the previous qualified tag without changing any existing tag
-or asset. If source correction is needed, open a revert PR, record the regression
-and fix in the changelog, and run complete qualification again before publishing
-a new version. Preserve failed-release evidence.
+or asset. If source correction is needed, open a revert PR and run complete
+qualification again before publishing a new version. Include the correction in
+the generated release notes from commits since the last release. Preserve
+failed-release evidence.
