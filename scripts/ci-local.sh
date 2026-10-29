@@ -8,9 +8,10 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 lane="${1:-required}"
 case "$lane" in
   required) bash ops/ci/required.sh ;;
+  pr-ci) bash ops/ci/pr-ci.sh ;;
   fast)     bash ops/ci/fast.sh ;;
   security) bash ops/ci/security.sh ;;
   audit)    bash ops/ci/audit.sh ;;
   gates|all) bash ops/ci/quality-gates.sh ;;
-  *) echo "usage: $0 {required|fast|security|audit|gates|all}" >&2; exit 2 ;;
+  *) echo "usage: $0 {required|pr-ci|fast|security|audit|gates|all}" >&2; exit 2 ;;
 esac
